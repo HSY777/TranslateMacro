@@ -16,8 +16,14 @@ def btncmd():
 
 def startTL():
     startWord, combine_data = readSentenceFromExcel()
+    p_var.set(25)
+    progressbar.update()
     list_arriveWord = getResultFromGooleTL(combine_data)
+    p_var.set(65)
+    progressbar.update()
     writeSentenceOnExecl(startWord, list_arriveWord)
+    p_var.set(100)
+    progressbar.update()
 
 def readSentenceFromExcel():
     data = pd.read_excel('./input_sentence.xlsx')

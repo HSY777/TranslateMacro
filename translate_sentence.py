@@ -1,6 +1,5 @@
 import pandas as pd
 from selenium import webdriver
-from bs4 import BeautifulSoup
 import time
 import threading, queue
 from tkinter import *
@@ -53,7 +52,7 @@ def btncmd():
     t.start()
     label1.config(text = '번역중')
 
-def main():    
+def main():  
     root.mainloop()
 
 if __name__ == '__main__':
