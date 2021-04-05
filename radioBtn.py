@@ -6,10 +6,10 @@ root.geometry("640x480")
 
 Label(root, text = '출발어').pack()
 
-startLang_var = IntVar()
+startLang_var = StringVar()
 btn_kor = Radiobutton(root, text = '한국어', value = 1, variable = startLang_var)
 btn_eng = Radiobutton(root, text = '영어', value = 2, variable = startLang_var)
-btn_ch = Radiobutton(root, text = '중국어', value = 3, variable = startLang_var)
+btn_ch = Radiobutton(root, text = '중국어', value =3, variable = startLang_var)
 btn_jp = Radiobutton(root, text = '일본어', value = 4, variable = startLang_var)
 
 btn_kor.pack()

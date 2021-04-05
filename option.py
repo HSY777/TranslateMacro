@@ -16,8 +16,14 @@ def btncmd():
 
 def startTL():
     startWord, combine_data = readSentenceFromExcel()
+    p_var.set(25)
+    progressbar.update()
     list_arriveWord = getResultFromGooleTL(combine_data)
+    p_var.set(65)
+    progressbar.update()
     writeSentenceOnExecl(startWord, list_arriveWord)
+    p_var.set(100)
+    progressbar.update()
 
 def readSentenceFromExcel():
     data = pd.read_excel('./input_sentence.xlsx')
@@ -57,10 +63,43 @@ def writeSentenceOnExecl(startWord, list_arriveWord):
     df.to_excel('input_sentence.xlsx', sheet_name='new_name', index=False, header=True)
     progress_label.config(text = '완료')
 
+def maching_TLcode():
+    selCount = 0
+
+    for i in sel_resultLang:
+        if i == 1:
+            set_resultLnag.append(arrLangCode[selCount])
+        selCount += 1
+    
+    print(sel_resultLang)
+    print(set_resultLnag)
+
+def set_option():
+    appendLnag()
+    maching_TLcode()
+    startLangCode = startLang_var.get()
+    print(startLangCode)
+
 def btncmd():
-    t = threading.Thread(target = startTL)
-    t.start()
-    progress_label.config(text = '번역중')
+    set_option()
+    #t = threading.Thread(target = startTL)
+    #t.start()
+    #progress_label.config(text = '번역중')
+
+def appendLnag():
+    sel_resultLang.append(arrLang_var_reTL.get())
+    sel_resultLang.append(arrLang_var_Eng.get())
+    sel_resultLang.append(arrLang_var_Ch.get())
+    sel_resultLang.append(arrLang_var_Jp.get())
+    sel_resultLang.append(arrLang_var_Spain.get())
+    sel_resultLang.append(arrLang_var_France.get())
+    sel_resultLang.append(arrLang_var_Germany.get())
+    sel_resultLang.append(arrLang_var_Vietnam.get())
+    sel_resultLang.append(arrLang_var_Indonesia.get())
+    sel_resultLang.append(arrLang_var_Laos.get())
+    sel_resultLang.append(arrLang_var_Thailand.get())
+    sel_resultLang.append(arrLang_var_Russia.get())
+    sel_resultLang.append(arrLang_var_All.get())
 
 def main():    
     # Set Location of UI argument
@@ -85,7 +124,7 @@ def main():
     arrLang_checkBtn_Indonesia.grid(row = 2, column = 0) 
     arrLang_checkBtn_Laos.grid(row = 3, column = 0) 
     arrLang_checkBtn_Thailand.grid(row = 3, column = 0)
-    arrLang_checkBtn_Brazil.grid(row = 3, column = 0) 
+    arrLang_checkBtn_Russia.grid(row = 3, column = 0) 
     arrLang_checkBtn_All.grid(row = 4, column = 0) 
 
     frame_progressbar.place(x = 115, y = 210)
@@ -101,8 +140,12 @@ if __name__ == '__main__':
     root.geometry('480x320')
     
     # Init Value(global)
-    startLang_var = IntVar()
+    sel_resultLang = []
+    set_resultLnag = []
+    startLangCode = ''
+    arrLangCode = ['re', 'en', 'zh-CN', 'ja', 'es', 'fr', 'de', 'vi', 'id', 'lo', 'th', 'ru', 'all']
 
+    startLang_var = StringVar()
     arrLang_var_reTL = IntVar() 
     arrLang_var_Eng = IntVar() 
     arrLang_var_Ch = IntVar() 
@@ -114,16 +157,15 @@ if __name__ == '__main__':
     arrLang_var_Indonesia = IntVar() 
     arrLang_var_Laos = IntVar() 
     arrLang_var_Thailand = IntVar() 
-    arrLang_var_Brazil = IntVar() 
+    arrLang_var_Russia = IntVar() 
     arrLang_var_All = IntVar() 
-
     p_var = IntVar()
 
     # Definition UI argument(global)
     frame_select_startLang = LabelFrame(root, text = 'Start Language')
-    startLang_radioBtn_kor = Radiobutton(frame_select_startLang, text = 'Korean', value = 1, variable = startLang_var)
-    startLang_radioBtn_eng = Radiobutton(frame_select_startLang, text = 'English', value = 2, variable = startLang_var)
-    startLang_radioBtn_ch = Radiobutton(frame_select_startLang, text = 'Chineses', value = 3, variable = startLang_var)
+    startLang_radioBtn_kor = Radiobutton(frame_select_startLang, text = 'Korean', value = 'kr', variable = startLang_var)
+    startLang_radioBtn_eng = Radiobutton(frame_select_startLang, text = 'English', value = 'en', variable = startLang_var)
+    startLang_radioBtn_ch = Radiobutton(frame_select_startLang, text = 'Chineses', value = 'zh-CN', variable = startLang_var)
     
     frame_select_arrLang = LabelFrame(root, text = 'Result Language') # borderwidth = 상수: 라벨 프레임 두께
     frame_sep_arrLang1 = LabelFrame(frame_select_arrLang, text = '', borderwidth = 0)
@@ -141,7 +183,7 @@ if __name__ == '__main__':
     arrLang_checkBtn_Indonesia = Checkbutton(frame_sep_arrLang3, text = 'Indonesia    ', variable = arrLang_var_Indonesia)
     arrLang_checkBtn_Laos = Checkbutton(frame_sep_arrLang1, text = 'Laos            ', variable = arrLang_var_Laos)
     arrLang_checkBtn_Thailand = Checkbutton(frame_sep_arrLang2, text = 'Thailand    ', variable = arrLang_var_Thailand)
-    arrLang_checkBtn_Brazil = Checkbutton(frame_sep_arrLang3, text = 'Brazil          ', variable = arrLang_var_Brazil)
+    arrLang_checkBtn_Russia = Checkbutton(frame_sep_arrLang3, text = 'Russia          ', variable = arrLang_var_Russia)
     arrLang_checkBtn_All = Checkbutton(frame_sep_arrLang1, text = 'All Lnaguages', variable = arrLang_var_All)
 
     frame_progressbar = LabelFrame(root, text = '', borderwidth = 0)
