@@ -16,14 +16,8 @@ def btncmd():
 
 def startTL():
     startWord, combine_data = readSentenceFromExcel()
-    p_var.set(25)
-    progressbar.update()
     list_arriveWord = getResultFromGooleTL(combine_data)
-    p_var.set(65)
-    progressbar.update()
     writeSentenceOnExecl(startWord, list_arriveWord)
-    p_var.set(100)
-    progressbar.update()
 
 def readSentenceFromExcel():
     data = pd.read_excel('./input_sentence.xlsx')
@@ -99,6 +93,8 @@ def appendLnag():
     sel_resultLang.append(arrLang_var_Laos.get())
     sel_resultLang.append(arrLang_var_Thailand.get())
     sel_resultLang.append(arrLang_var_Russia.get())
+    sel_resultLang.append(arrLang_var_Portugal.get())
+    sel_resultLang.append(arrLang_var_Taiwan.get())
     sel_resultLang.append(arrLang_var_All.get())
 
 def main():    
@@ -125,6 +121,8 @@ def main():
     arrLang_checkBtn_Laos.grid(row = 3, column = 0) 
     arrLang_checkBtn_Thailand.grid(row = 3, column = 0)
     arrLang_checkBtn_Russia.grid(row = 3, column = 0) 
+    arrLang_checkBtn_Portugal.grid(row = 4, column = 0) 
+    arrLang_checkBtn_Taiwan.grid(row = 4, column = 0) 
     arrLang_checkBtn_All.grid(row = 4, column = 0) 
 
     frame_progressbar.place(x = 115, y = 210)
@@ -137,13 +135,13 @@ if __name__ == '__main__':
     # Init Tkinter
     root = Tk()
     root.title('Translate Macro')
-    root.geometry('480x320')
+    root.geometry('500x340')
     
     # Init Value(global)
     sel_resultLang = []
     set_resultLnag = []
     startLangCode = ''
-    arrLangCode = ['re', 'en', 'zh-CN', 'ja', 'es', 'fr', 'de', 'vi', 'id', 'lo', 'th', 'ru', 'all']
+    arrLangCode = ['re', 'en', 'zh-CN', 'ja', 'es', 'fr', 'de', 'vi', 'id', 'lo', 'th', 'ru', 'pt', 'ch-TW', 'all']
 
     startLang_var = StringVar()
     arrLang_var_reTL = IntVar() 
@@ -157,7 +155,9 @@ if __name__ == '__main__':
     arrLang_var_Indonesia = IntVar() 
     arrLang_var_Laos = IntVar() 
     arrLang_var_Thailand = IntVar() 
-    arrLang_var_Russia = IntVar() 
+    arrLang_var_Russia = IntVar()
+    arrLang_var_Portugal = IntVar()
+    arrLang_var_Taiwan = IntVar()
     arrLang_var_All = IntVar() 
     p_var = IntVar()
 
@@ -184,7 +184,9 @@ if __name__ == '__main__':
     arrLang_checkBtn_Laos = Checkbutton(frame_sep_arrLang1, text = 'Laos            ', variable = arrLang_var_Laos)
     arrLang_checkBtn_Thailand = Checkbutton(frame_sep_arrLang2, text = 'Thailand    ', variable = arrLang_var_Thailand)
     arrLang_checkBtn_Russia = Checkbutton(frame_sep_arrLang3, text = 'Russia          ', variable = arrLang_var_Russia)
-    arrLang_checkBtn_All = Checkbutton(frame_sep_arrLang1, text = 'All Lnaguages', variable = arrLang_var_All)
+    arrLang_checkBtn_Portugal = Checkbutton(frame_sep_arrLang1, text = 'Portugal       ', variable = arrLang_var_Portugal)
+    arrLang_checkBtn_Taiwan = Checkbutton(frame_sep_arrLang2, text = 'Taiwan       ', variable = arrLang_var_Taiwan)
+    arrLang_checkBtn_All = Checkbutton(frame_sep_arrLang3, text = 'All Lnaguages', variable = arrLang_var_All)
 
     frame_progressbar = LabelFrame(root, text = '', borderwidth = 0)
     progressbar = ttk.Progressbar(frame_progressbar, maximum = 100, length = 250, variable = p_var)

@@ -1,6 +1,7 @@
 from tkinter import *
 import tkinter.ttk as ttk
 import threading, queue, time
+from selenium import webdriver
 
 class Worker(threading.Thread):
     def __init__(self, name, arrLangCode):
@@ -9,14 +10,36 @@ class Worker(threading.Thread):
         self.arrLangCode = arrLangCode            # thread 이름 지정
 
     def run(self):
-        print("sub thread start ", threading.currentThread().getName())
-        print(self.arrLangCode)
+        css_sel = '#yDmH0d > c-wiz > div > div.WFnNle > c-wiz > div.OlSOob > c-wiz > div.ccvoYb > div.AxqVh > div.OPPzxe > c-wiz.P6w8m.BDJ8fb.BLojaf > div.dePhmb > div > div.J0lOec'
+        url = 'https://translate.google.co.kr/?hl=' + sel_startL + '&sl=ko&tl=' + self.arrLangCode + '&text=' + combine_startL_sentence + '&op=translate'
+
+        driver = webdriver.Chrome('./chromedriver')
+        #driver.minimize_window()
+        driver.get(url)  
+        driver.implicitly_wait(10)
+        rating = driver.find_element_by_css_selector(css_sel)
         time.sleep(3)
-        print("sub thread end ", threading.currentThread().getName())
+
+        arriveWord = rating.text
+        sumWord = ''
+        sep_result_TL = []
+        for i in arriveWord:
+            sumWord += i
+            if i == '\n':
+                sep_result_TL.append(sumWord)
+                sumWord = ''
+
+        #driver.quit()
+        append_result_TL.append(sep_result_TL)
+        print(sep_result_TL)
+        #print("sub thread start ", threading.currentThread().getName())
+        #print(self.arrLangCode)
+        #time.sleep(3)
+        #print("sub thread end ", threading.currentThread().getName())
 
 def readSentenceFromExcel():
     startWord = 'startWord11'
-    combine_data = 'combine_data11'
+    #combine_startL_sentence = '유튜브제목%0A유튜브제목%0A신원길%20멍청한놈%0A유튜브제목%0A유튜브제목%0A신원길%20멍청한놈%0A유튜브제목%0A유튜브제목%0A신원길%20멍청한놈%0A유튜브제목%0A유튜브제목%0A신원길%20멍청한놈%0A헤시태그내용~~~%0A멍청이%0A목아프다%0A'
 
 def startTL():
     readSentenceFromExcel()
@@ -26,8 +49,8 @@ def startTL():
         t1.start()
 
 def btncmd():
-    startL_count = txt1.get('1.0', 'end')
-    print(startL_count)
+    #sel_startL = txt1.get('1.0', 'end')
+    print(sel_startL)
     print(radioval.get())
 
     t = threading.Thread(target = startTL)
@@ -49,13 +72,14 @@ if __name__ == '__main__':
 
     # TLV
     startWord = ''
-    combine_data = ''
+    combine_startL_sentence = '유튜브제목%0A유튜브제목%0A신원길%20멍청한놈%0A유튜브제목%0A유튜브제목%0A신원길%20멍청한놈%0A유튜브제목%0A유튜브제목%0A신원길%20멍청한놈%0A유튜브제목%0A유튜브제목%0A신원길%20멍청한놈%0A헤시태그내용~~~%0A멍청이%0A목아프다%0A'
+    append_result_TL = []
 
     # varialbe
-    startL_count = ''
+    sel_startL = 'ko'
     arrL_count = 0
     radioval = IntVar()
-    arrLangCode = ['re', 'en', 'zh', 'ja', 'es']
+    arrLangCode = ['pt', 'en', 'zh', 'ja', 'es']
 
     txt1 = Text(root, height = 1, width = 10)
     check1 = Radiobutton(root, text = '1', value = '1', variable = radioval)
