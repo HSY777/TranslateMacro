@@ -46,11 +46,23 @@ def readSentenceFromExcel():
     #combine_startL_sentence = '유튜브제목%0A유튜브제목%0A신원길%20안녕하세요%0A유튜브제목%0A유튜브제목%0A신원길%20안녕하세요%0A유튜브제목%0A유튜브제목%0A신원길%20안녕하세요%0A유튜브제목%0A유튜브제목%0A신원길%20안녕하세요%0A헤시태그내용~~~%0A안녕%0A목아프다%0A'
 
 def testTask():
+    global append_result_TL
     while(comple_count != radioval.get()):
             print(comple_count)
             time.sleep(1)
 
-    print(append_result_TL)
+    for k in range(radioval.get()):
+        print(append_result_TL[k][1])
+
+    s_append_result_TL = len(append_result_TL)
+    for i in range(len(append_result_TL)):
+        for j in range(len(append_result_TL)):
+            if i == append_result_TL[j][1]:
+                append_result_TL.insert(i, append_result_TL[j])
+    append_result_TL = append_result_TL[: s_append_result_TL]
+    print("--------------------------------------")
+    for l in range(radioval.get()):
+        print(append_result_TL[l][1])
     '''for i in range(radioval.get()):
         #print(append_result_TL[i][1])
         if append_result_TL[i][1] == radioval.get():
