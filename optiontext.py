@@ -158,7 +158,7 @@ if __name__ == '__main__':
     arrLang_var_Russia = IntVar()
     arrLang_var_Portugal = IntVar()
     arrLang_var_Taiwan = IntVar()
-    arrLang_var_All = IntVar() 
+    arrLang_var_All = IntVar()
     p_var = IntVar()
 
     # Definition UI argument(global)

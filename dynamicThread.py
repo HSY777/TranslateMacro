@@ -69,6 +69,8 @@ def testTask():
             print(type(append_result_TL[i][1]))
     '''
 def startTL():
+    TLthread_list = []
+    
     readSentenceFromExcel()
     for i in range(radioval.get()):
         name = "thread {}".format(i)
@@ -113,7 +115,6 @@ if __name__ == '__main__':
     arrL_count = 0
     radioval = IntVar()
     arrLangCode = ['pt', 'en', 'zh-CN', 'ja', 'es']
-    TLthread_list = []
     comple_count = 0
 
     txt1 = Text(root, height = 1, width = 10)

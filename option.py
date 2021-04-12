@@ -13,22 +13,95 @@ def btncmd():
         progressbar.update()
         print(p_var.get())
 '''        
-
+'''
 def startTL():
     startWord, combine_data = readSentenceFromExcel()
     list_arriveWord = getResultFromGooleTL(combine_data)
     writeSentenceOnExecl(startWord, list_arriveWord)
+'''
+class Worker(threading.Thread):
+    def __init__(self, name, set_resultLnag, num):
+        super().__init__()
+        self.name = name
+        self.set_resultLnag = set_resultLnag            # thread 이름 지정
+        self.num = num
+
+    def run(self):
+        global comple_count
+        css_sel = '#yDmH0d > c-wiz > div > div.WFnNle > c-wiz > div.OlSOob > c-wiz > div.ccvoYb > div.AxqVh > div.OPPzxe > c-wiz.P6w8m.BDJ8fb.BLojaf > div.dePhmb > div > div.J0lOec'
+        url = 'https://translate.google.co.kr/?hl=' + setLangCode + '&sl=ko&tl=' + self.set_resultLnag + '&text=' + combine_data + '&op=translate'
+
+        driver = webdriver.Chrome('./chromedriver')
+        #driver.minimize_window()
+        driver.get(url)  
+        driver.implicitly_wait(10)
+        rating = driver.find_element_by_css_selector(css_sel)
+        #time.sleep(3)
+
+        arriveWord = rating.text
+        sumWord = ''
+        sep_result_TL = []
+        for i in arriveWord:
+            sumWord += i
+            if i == '\n':
+                sep_result_TL.append(sumWord)
+                sumWord = ''
+
+        #driver.quit()
+        comple_count += 1
+        print('완료')
+        append_result_TL.append((sep_result_TL, self.num))
+
+def testTask():
+    global append_result_TL
+    while(comple_count != len(set_resultLnag)):
+            print(comple_count)
+            time.sleep(1)
+
+    for k in range(len(set_resultLnag)):
+        print(append_result_TL[k])
+    for b in range(len(set_resultLnag)):
+        print(append_result_TL[b][1])
+
+    s_append_result_TL = len(append_result_TL)
+    for i in range(len(append_result_TL)):
+        for j in range(len(append_result_TL)):
+            if i == append_result_TL[j][1]:
+                append_result_TL.insert(i, append_result_TL[j])
+    append_result_TL = append_result_TL[: s_append_result_TL]
+    print("--------------------------------------")
+    for l in range(len(set_resultLnag)):
+        print(append_result_TL[l])
+    for a in range(len(set_resultLnag)):
+        print(append_result_TL[a][1])
+
+def startTL():
+    TLthread_list = []
+
+    readSentenceFromExcel()
+    for i in range(len(set_resultLnag)):
+        name = "thread {}".format(i)
+        num = i
+        TLthread_list.append(Worker(name, set_resultLnag[i], num))
+
+    for i in range(len(set_resultLnag)):
+        TLthread_list[i].start()
+
+    test1 = threading.Thread(target = testTask)
+    test1.start()
 
 def readSentenceFromExcel():
+    global combine_data
+    global startWord
+
     data = pd.read_excel('./input_sentence.xlsx')
     startWord = data.startSentence.values  # <class 'numpy.ndarray'>
-    combine_data = ''
 
     for i in range(len(startWord)):
         combine_data = combine_data + startWord[i]
         combine_data = combine_data + '%0A'
-    return startWord, combine_data
 
+'''
 def getResultFromGooleTL(add_url):
     css_sel = '#yDmH0d > c-wiz > div > div.WFnNle > c-wiz > div.OlSOob > c-wiz > div.ccvoYb > div.AxqVh > div.OPPzxe > c-wiz.P6w8m.BDJ8fb.BLojaf > div.dePhmb > div > div.J0lOec'
     url = 'https://translate.google.co.kr/?hl=ko&sl=ko&tl=en&text=' + add_url + '&op=translate'
@@ -51,6 +124,7 @@ def getResultFromGooleTL(add_url):
 
     driver.quit()
     return list_arriveWord
+'''
 
 def writeSentenceOnExecl(startWord, list_arriveWord):
     df = pd.DataFrame({'startSentence': startWord, 'arriveSentence': list_arriveWord})
@@ -58,8 +132,9 @@ def writeSentenceOnExecl(startWord, list_arriveWord):
     progress_label.config(text = '완료')
 
 def maching_TLcode():
+    global set_resultLnag
+    
     selCount = 0
-
     for i in sel_resultLang:
         if i == 1:
             set_resultLnag.append(arrLangCode[selCount])
@@ -68,19 +143,9 @@ def maching_TLcode():
     print(sel_resultLang)
     print(set_resultLnag)
 
-def set_option():
-    appendLnag()
-    maching_TLcode()
-    startLangCode = startLang_var.get()
-    print(startLangCode)
-
-def btncmd():
-    set_option()
-    #t = threading.Thread(target = startTL)
-    #t.start()
-    #progress_label.config(text = '번역중')
-
 def appendLnag():
+    global sel_resultLang
+
     sel_resultLang.append(arrLang_var_reTL.get())
     sel_resultLang.append(arrLang_var_Eng.get())
     sel_resultLang.append(arrLang_var_Ch.get())
@@ -96,6 +161,22 @@ def appendLnag():
     sel_resultLang.append(arrLang_var_Portugal.get())
     sel_resultLang.append(arrLang_var_Taiwan.get())
     sel_resultLang.append(arrLang_var_All.get())
+  
+def set_option():
+    global setLangCode
+
+    appendLnag()
+    maching_TLcode()
+    setLangCode = startLang_var.get()
+
+def btncmd():
+    set_option()
+    print(setLangCode)
+    t = threading.Thread(target = startTL)
+    t.start()
+    #progress_label.config(text = '번역중')
+
+
 
 def main():    
     # Set Location of UI argument
@@ -140,8 +221,12 @@ if __name__ == '__main__':
     # Init Value(global)
     sel_resultLang = []
     set_resultLnag = []
-    startLangCode = ''
-    arrLangCode = ['re', 'en', 'zh-CN', 'ja', 'es', 'fr', 'de', 'vi', 'id', 'lo', 'th', 'ru', 'pt', 'ch-TW', 'all']
+    setLangCode = ''
+    arrLangCode = ['re', 'en', 'zh-CN', 'ja', 'es', 'fr', 'de', 'vi', 'id', 'lo', 'th', 'ru', 'pt', 'zh-TW', 'all']
+    startWord = []
+    combine_data = ''
+    append_result_TL = []
+    comple_count = 0
 
     startLang_var = StringVar()
     arrLang_var_reTL = IntVar() 
