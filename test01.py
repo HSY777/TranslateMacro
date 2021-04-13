@@ -24,7 +24,7 @@ class TLprocessor:
 
         driver = webdriver.Chrome('./chromedriver')
         driver.minimize_window()
-        driver.get(url)  
+        driver.get(url)
         driver.implicitly_wait(10)
         rating = driver.find_element_by_css_selector(css_sel)
         time.sleep(3)
