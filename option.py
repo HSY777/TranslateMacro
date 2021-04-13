@@ -50,18 +50,23 @@ class Worker(threading.Thread):
         #driver.quit()
         comple_count += 1
         print('완료')
-        append_result_TL.append((sep_result_TL, self.num))
+        append_result_TL.append((sep_result_TL, self.num, self.set_resultLnag))
 
 def testTask():
     global append_result_TL
+    language_name = {'re':'Re-Translate', 'en':'English', 'zh-CN':'Chinese', 'ja':'Japanese', 'es':'Spanish', 'fr':'French', 'de':'German', 'vi':'Vietnamese', 'id':'Indonesian', 'lo':'Lao', 'th':'Thai', 'ru':'Russian', 'pt':'Portuguese', 'zh-TW':'Taiwanese'}
+    excelLnageName = []
+    dataFrame_dict = {}
+
     while(comple_count != len(set_resultLnag)):
             print(comple_count)
             time.sleep(1)
-
+    '''
     for k in range(len(set_resultLnag)):
         print(append_result_TL[k])
     for b in range(len(set_resultLnag)):
         print(append_result_TL[b][1])
+    '''
 
     s_append_result_TL = len(append_result_TL)
     for i in range(len(append_result_TL)):
@@ -69,11 +74,24 @@ def testTask():
             if i == append_result_TL[j][1]:
                 append_result_TL.insert(i, append_result_TL[j])
     append_result_TL = append_result_TL[: s_append_result_TL]
+    '''
     print("--------------------------------------")
     for l in range(len(set_resultLnag)):
         print(append_result_TL[l])
     for a in range(len(set_resultLnag)):
-        print(append_result_TL[a][1])
+        print(append_result_TL[a][2])
+    '''
+    for g in append_result_TL:
+        for key, val in language_name.items():
+            if g[2] == key:
+                excelLnageName.append(val)
+    
+    dataFrame_dict['startSentence'] = startWord
+    for h in range(len(append_result_TL)):
+        dataFrame_dict[excelLnageName[h]] = append_result_TL[h][0]
+
+    df = pd.DataFrame(dataFrame_dict)
+    df.to_excel('input_sentence.xlsx', sheet_name='new_name', index=False, header=True)
 
 def startTL():
     TLthread_list = []
